@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import AddUser from '../AddUser/AddUser'
+import List from '../List/List';
+import Search from '../Search/Search';
    
 class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
             edit: true,
-            add: false
+            add: false,
+            status: false,
+            list: this.props.data
         }
     }
 
@@ -20,6 +24,18 @@ class Content extends Component {
         <button type="button" onClick={ () => this.saveClick() } className="btn btn-sm btn-success">Save</button>
         </div>
     )
+
+    keyword = (key_word) => {
+        let result = [];
+        this.props.data.forEach((item) => {
+            if(item.name.indexOf(key_word) > -1){
+                result.push(item);
+            }
+        })
+        this.setState({
+            list: result
+        })       
+    }
 
     displayCheck = () => {
         if (this.state.edit == true) {
@@ -38,8 +54,22 @@ class Content extends Component {
         console.log(this.trunggian.value);
     }
     changeState = () => {
+        console.log("c<UserRow item={value} id={key}/>hange status");
+        console.log(this.state.add);
         this.setState({
             add: !this.state.add
+        })
+    }
+
+    addItem = (name, age, phone) => {
+        let item = {
+            "name": name,
+            "age": age,
+            "phone": phone,
+        }
+        this.state.list.push(item);
+        this.setState({
+            list: this.state.list
         })
     }
 
@@ -92,54 +122,11 @@ class Content extends Component {
                                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                                 <li class="breadcrumb-item active">Tables</li>
                             </ol>
-                            <div class="input-group">
-                                <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)"/>
-                                <div class="input-group-append">
-                                <button type="button" class="btn btn-success">Tìm kiếm</button>
-                                </div>
-                            </div>
+                            <Search status={ () => this.changeState()} keyword={ (key_word) => this.keyword(key_word)} showForm={this.state.add }/>
                             
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Brielle Williamson</td>
-                                                <td>Integration Specialist</td>
-                                                <td>New York</td>
-                                                <td>61</td>
-                                                <td>2012/12/02</td>
-                                                <td>$372,000</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <List data={ this.state.list }/>
                         </div>
-
-                        
-                    
-                        <div class="col-4">
-                            { this.addUser() }
-                        </div>
+                        <AddUser status={this.state.add} addItem={(name, age, phone) => this.addItem(name, age, phone)}/>
                     </div>
                 </div>
             </main>

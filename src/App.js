@@ -17,13 +17,15 @@ import './assets/css/dataTables.css';
 
 import { Router } from 'react-router-dom';
 import RoutePage from './router/RoutePage';
+import ListUser from './database.json'
 
 class App extends Component {
   constructor(props) {
     super(props);
     console.log("constructor");
     this.state = {
-      test: "11111"
+      test: "11111",
+      listUser: ListUser
     }
   }
 
@@ -67,7 +69,7 @@ class App extends Component {
             <div id="layoutSidenav">
                 <SideNav/>
                 <div id="layoutSidenav_content">
-                    <Content/>
+                    <Content data={ this.state.listUser }/>
                     <Footer/>
                 </div>
             </div>
